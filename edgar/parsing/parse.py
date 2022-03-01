@@ -38,12 +38,19 @@ def parse_file(args_list: str):
         
         # Tabular Data
         if mode != 'x':
-            table = soup.find_all(name= 'table')[0]
-            table = table.find_all(name = 'th')
-            table = [str(x)+"\n\n" for x in table if not str.isspace(str(x))]
+            content = ['<content>']
+            for table in soup.find_all(name= 'table'):
+                data =f'<{str(table.get("class"))}>'
+                for row_data in table.find_all(name = 'tr'):
+                    row = ", ".join([f'{x.get_text()}' for x in row_data.find_all(name = 'td')])
+                    data += re.sub('[ \n\t                ]+', ' ', row)
+                    data += "\n"    # new Line, New row
+                data += f'</{str(table.get("class"))}>\n'
 
-            with open(f'''output_data/table/{xmlfile.split('/')[-1][:-5]}.xml''', 'w') as f:
-                f.write('\r'.join(table))
+                content.append(data)
+            content.append('</content')
+            with open(f'''output_data/table/{xmlfile.split('/')[-1][:-5]}.xml''', 'a') as f:
+                f.write('\r'.join(content))
 
     except Exception as e:
         response_message = str(e)
@@ -103,7 +110,7 @@ if __name__ == '__main__':
         print("Unable to Parse the following docs:")
         [print(key,":", failed[key]) for key in failed]
     with open('failed_docs.txt','w') as f:
-        f.write('\r'.join(failed))
+        f.write('\r'.join([key+": "+ failed[key] for key in failed]))
 
     ## ----------------------
 
