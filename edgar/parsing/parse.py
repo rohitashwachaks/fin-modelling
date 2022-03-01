@@ -60,6 +60,10 @@ def parse_file(args_list: str):
 
 #%% Main Function
 
+def func():
+    # global var
+    print(var)
+
 if __name__ == '__main__':
     file_list = []
     failed = dict()
@@ -74,9 +78,13 @@ if __name__ == '__main__':
                     help='Number of cores to use', default= os.cpu_count())
     parser.add_argument("-f", '--files', type=str, nargs='+',
                     help="space separated files/folders")
+    parser.add_argument("-o", '--output', type=str,
+                    help="output folder path")
     args=parser.parse_args()
 
     ## -------------------
+
+    global output_path
 
     ## Fetch files to parse
 
