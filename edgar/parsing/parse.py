@@ -33,12 +33,14 @@ def parse_file(args_list: str):
             text = '\r'.join([x for x in text if not str.isspace(x)])
             text = re.sub('[ \n\t                ]+', ' ', text)
 
+            os.makedirs('output_data/txt/', exist_ok=True)
             with open(f'''output_data/txt/{xmlfile.split('/')[-1][:-5]}.txt''', 'w') as f:
                 f.write(text)
         
         # Tabular Data
         if mode != 'x':
             content = ['<content>']
+            os.makedirs('output_data/table/', exist_ok=True)
             for table in soup.find_all(name= 'table'):
                 data =f'<{str(table.get("class"))}>'
                 for row_data in table.find_all(name = 'tr'):
@@ -59,10 +61,6 @@ def parse_file(args_list: str):
     return company, date, form, doc_id, flag, response_message
 
 #%% Main Function
-
-def func():
-    # global var
-    print(var)
 
 if __name__ == '__main__':
     file_list = []
