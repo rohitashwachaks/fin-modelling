@@ -130,3 +130,5 @@ dmypy.json
 *.txt
 *.html
 *.xml
+*.csv
+*.zip
